@@ -1,0 +1,234 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOIBC864wETT6aBae/h5UYU",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Z-the-original/Qiskit-implementation-of-BB84/blob/main/notebook\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [],
+      "metadata": {
+        "id": "oTIKK6HofbMC"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "YZ9qnvXkfXGL",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "bc263df9-421e-4d70-8cb2-f09b484f3681"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: qiskit-ibm-runtime in /usr/local/lib/python3.13/dist-packages (0.51.0)\n",
+            "Requirement already satisfied: qiskit-aer in /usr/local/lib/python3.13/dist-packages (0.18.0)\n",
+            "Requirement already satisfied: qiskit_qasm3_import in /usr/local/lib/python3.13/dist-packages (0.6.0)\n",
+            "Requirement already satisfied: qiskit[visualization] in /usr/local/lib/python3.13/dist-packages (2.6.1)\n",
+            "Requirement already satisfied: numpy<3,>=2.0 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (2.1.3)\n",
+            "Requirement already satisfied: scipy>=1.14 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (1.16.3)\n",
+            "Requirement already satisfied: rustworkx>=0.15.0 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (0.18.1)\n",
+            "Requirement already satisfied: dill>=0.3 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (0.4.1)\n",
+            "Requirement already satisfied: stevedore>=3.0.0 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (5.9.1)\n",
+            "Requirement already satisfied: typing-extensions in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (4.16.0)\n",
+            "Requirement already satisfied: matplotlib>=3.3 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (3.10.0)\n",
+            "Requirement already satisfied: pydot in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (4.0.1)\n",
+            "Requirement already satisfied: Pillow>=4.2.1 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (11.3.0)\n",
+            "Requirement already satisfied: pylatexenc>=1.4 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (2.11)\n",
+            "Requirement already satisfied: seaborn>=0.9.0 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (0.13.2)\n",
+            "Requirement already satisfied: sympy>=1.3 in /usr/local/lib/python3.13/dist-packages (from qiskit[visualization]) (1.14.0)\n",
+            "Requirement already satisfied: requests>=2.32.4 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (2.32.4)\n",
+            "Requirement already satisfied: requests-ntlm>=1.1.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (1.3.0)\n",
+            "Requirement already satisfied: urllib3>=2.4.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (2.5.0)\n",
+            "Requirement already satisfied: python-dateutil>=2.9.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (2.9.0.post0)\n",
+            "Requirement already satisfied: ibm-platform-services>=0.61.1 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (0.77.1)\n",
+            "Requirement already satisfied: ibm-quantum-schemas<1,>=0.13.20261016 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (0.13.20261016)\n",
+            "Requirement already satisfied: pydantic>=2.13.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (2.14.1)\n",
+            "Requirement already satisfied: pybase64>=1.4.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (1.5.1)\n",
+            "Requirement already satisfied: samplomatic>=0.21.0 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (0.21.0)\n",
+            "Requirement already satisfied: qiskit-mitigation>=0.1.1 in /usr/local/lib/python3.13/dist-packages (from qiskit-ibm-runtime) (0.1.1)\n",
+            "Requirement already satisfied: openqasm3<2.0,>=0.4 in /usr/local/lib/python3.13/dist-packages (from openqasm3[parser]<2.0,>=0.4->qiskit_qasm3_import) (1.0.1)\n",
+            "Requirement already satisfied: antlr4_python3_runtime<4.14,>=4.7 in /usr/local/lib/python3.13/dist-packages (from openqasm3[parser]<2.0,>=0.4->qiskit_qasm3_import) (4.13.2)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.13/dist-packages (from pydantic>=2.13.0->qiskit-ibm-runtime) (0.8.0)\n",
+            "Requirement already satisfied: pydantic-core==2.50.1 in /usr/local/lib/python3.13/dist-packages (from pydantic>=2.13.0->qiskit-ibm-runtime) (2.50.1)\n",
+            "Requirement already satisfied: typing-inspection>=0.4.4 in /usr/local/lib/python3.13/dist-packages (from pydantic>=2.13.0->qiskit-ibm-runtime) (0.4.4)\n",
+            "Requirement already satisfied: psutil>=5 in /usr/local/lib/python3.13/dist-packages (from qiskit-aer) (5.9.5)\n",
+            "Requirement already satisfied: ibm_cloud_sdk_core<4.0.0,>=3.24.4 in /usr/local/lib/python3.13/dist-packages (from ibm-platform-services>=0.61.1->qiskit-ibm-runtime) (3.28.0)\n",
+            "Requirement already satisfied: PyJWT<3.0.0,>=2.11.0 in /usr/local/lib/python3.13/dist-packages (from ibm_cloud_sdk_core<4.0.0,>=3.24.4->ibm-platform-services>=0.61.1->qiskit-ibm-runtime) (2.15.1)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.13/dist-packages (from python-dateutil>=2.9.0->qiskit-ibm-runtime) (1.17.0)\n",
+            "Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.4->qiskit-ibm-runtime) (3.4.9)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.4->qiskit-ibm-runtime) (3.20)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.4->qiskit-ibm-runtime) (2026.10.19)\n",
+            "Requirement already satisfied: contourpy>=1.0.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (1.4.0)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (0.12.1)\n",
+            "Requirement already satisfied: fonttools>=4.22.0 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (4.67.0)\n",
+            "Requirement already satisfied: kiwisolver>=1.3.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (1.5.1)\n",
+            "Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (26.3)\n",
+            "Requirement already satisfied: pyparsing>=2.3.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib>=3.3->qiskit[visualization]) (3.3.3)\n",
+            "Requirement already satisfied: cryptography>=1.3 in /usr/local/lib/python3.13/dist-packages (from requests-ntlm>=1.1.0->qiskit-ibm-runtime) (50.0.2)\n",
+            "Requirement already satisfied: pyspnego>=0.4.0 in /usr/local/lib/python3.13/dist-packages (from requests-ntlm>=1.1.0->qiskit-ibm-runtime) (0.12.4)\n",
+            "Requirement already satisfied: cffi>=2.0.0 in /usr/local/lib/python3.13/dist-packages (from cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibm-runtime) (2.1.1)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.13/dist-packages (from cffi>=2.0.0->cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibm-runtime) (3.11)\n",
+            "Requirement already satisfied: orjson>=3.9.0 in /usr/local/lib/python3.13/dist-packages (from samplomatic>=0.21.0->qiskit-ibm-runtime) (3.13.0)\n",
+            "Requirement already satisfied: pandas>=1.2 in /usr/local/lib/python3.13/dist-packages (from seaborn>=0.9.0->qiskit[visualization]) (2.2.3)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.13/dist-packages (from pandas>=1.2->seaborn>=0.9.0->qiskit[visualization]) (2025.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.13/dist-packages (from pandas>=1.2->seaborn>=0.9.0->qiskit[visualization]) (2026.5)\n",
+            "Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.13/dist-packages (from sympy>=1.3->qiskit[visualization]) (1.3.0)\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install qiskit[visualization] qiskit-ibm-runtime qiskit-aer qiskit_qasm3_import\n",
+        "import numpy as np\n",
+        "from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister\n",
+        "from qiskit_aer import AerSimulator\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "\n",
+        "def validate(n, bases_a,bases_b,bits_list_a,bits_list_b):\n",
+        "  \"\"\"This function checks if our code works\"\"\"\n",
+        "  for i in range(n):\n",
+        "\n",
+        "    if bases_a[i] == bases_b[i]:\n",
+        "      if bits_list_a[i] != bits_list_b[i]:\n",
+        "        return False\n",
+        "  return True\n",
+        "\n",
+        "\n",
+        "\n",
+        "def generate_bit_or_basses_list(n):\n",
+        "  l = []\n",
+        "  for i in range(n):\n",
+        "    l.append(random.randint(0,1))\n",
+        "  return l\n",
+        "\n",
+        "\n",
+        "\n",
+        "def get_sifted_key(n, bases_a,bases_b,bits_list):\n",
+        "  ''' to be used after alice and bob will make the bases they used public\n",
+        "  practicaly, this means that we can compare the bases strings\n",
+        "  and eliminate unmatching instances on both sides to get a sifted key'''\n",
+        "\n",
+        "  s_key = []\n",
+        "  for i in range(n):\n",
+        "    if bases_a[i] == bases_b[i]:\n",
+        "      s_key.append(bits_list[i])\n",
+        "  return s_key\n",
+        "\n",
+        "qubit_number = 100 # not a hard code, may be replcd with input statement\n",
+        "\n",
+        "alice_bits = generate_bit_or_basses_list(qubit_number)\n",
+        "alice_bases = generate_bit_or_basses_list(qubit_number)\n",
+        "\n",
+        "\n",
+        "bob_bases = generate_bit_or_basses_list(qubit_number)\n",
+        "\n",
+        "qr = QuantumRegister(qubit_number)\n",
+        "cr = ClassicalRegister(qubit_number)  # same number of classical bits as qubits\n",
+        "\n",
+        "bb84_circuit = QuantumCircuit(qr,cr)\n",
+        "\n",
+        "# here we prepare alices side\n",
+        "for i in range(qubit_number):\n",
+        "  if alice_bits[i] == 1: # turn our initial zero into one, so our qubits hold alices bits\n",
+        "    bb84_circuit.x(qr[i])\n",
+        "\n",
+        "  if alice_bases[i] == 1: # if alice bases is 1, we encode in new basis\n",
+        "    bb84_circuit.h(qr[i])\n",
+        "# now alice sends her qubits to bob\n",
+        "\n",
+        "\n",
+        "for i in range(qubit_number):\n",
+        "     '''if bob's bases is one for ith position\n",
+        "     he measures in new basis.\n",
+        "     the new basis measurement means measuring after applying a\n",
+        "     hadamard'''\n",
+        "\n",
+        "     if bob_bases[i] == 1:\n",
+        "       bb84_circuit.h(qr[i])\n",
+        "     bb84_circuit.measure(qr[i], cr[i])\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "# in this part we run the circuit which represents the protocll\n",
+        "simulator = AerSimulator()\n",
+        "job = simulator.run(bb84_circuit, shots=1)\n",
+        "results = job.result()\n",
+        "output = (list(results.get_counts().keys())[0])\n",
+        "\n",
+        "\n",
+        "bob_bits = [int(i) for i in output][::-1]\n",
+        "\n",
+        "sifted_key = get_sifted_key(qubit_number, alice_bases, bob_bases, bits_list=alice_bits)\n",
+        "\n",
+        "\n",
+        "'''This sifted key is known by both Alice and Bob'''\n",
+        "\n",
+        "print(\"Alice bits:           \", alice_bits)\n",
+        "print(\"Bob measured bits:    \", bob_bits)\n",
+        "print(\"Alice bases :         \", alice_bases)\n",
+        "print(\"Bob bases   :         \", bob_bases)\n",
+        "print('Final selected key:   ',sifted_key)\n",
+        "\n",
+        "\n",
+        "print('Is sifted key correct:',validate(qubit_number,alice_bases,bob_bases,alice_bits,bob_bits))\n",
+        "\n",
+        "#bb84_circuit.draw('mpl')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Hj_GAD6FfkEA",
+        "outputId": "a6a14b2d-a696-46b6-bc7c-793467f17b12"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Alice bits:            [0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1]\n",
+            "Bob measured bits:     [0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]\n",
+            "Alice bases :          [1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0]\n",
+            "Bob bases   :          [0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0]\n",
+            "Final selected key:    [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1]\n",
+            "Is sifted key correct: True\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
